@@ -1,9 +1,9 @@
-package com.theah64.yts_nl.webengine.servlets;
+package com.theah64.webengine.servlets;
 
 
-import com.theah64.yts_nl.webengine.Request;
-import com.theah64.yts_nl.webengine.RequestException;
-import com.theah64.yts_nl.webengine.Response;
+import com.theah64.webengine.utils.Request;
+import com.theah64.webengine.utils.RequestException;
+import com.theah64.webengine.utils.Response;
 import org.json.JSONException;
 
 import javax.servlet.ServletException;

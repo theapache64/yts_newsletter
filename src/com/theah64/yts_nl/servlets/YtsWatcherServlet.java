@@ -1,11 +1,13 @@
 package com.theah64.yts_nl.servlets;
 
-import com.theah64.yts_nl.webengine.RequestException;
-import com.theah64.yts_nl.webengine.servlets.AdvancedBaseServlet;
+import com.theah64.webengine.servlets.AdvancedBaseServlet;
+import com.theah64.webengine.utils.RequestException;
 import org.json.JSONException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -14,6 +16,11 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/yts_watcher"})
 public class YtsWatcherServlet extends AdvancedBaseServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPost(req, resp);
+    }
 
     @Override
     protected String[] getRequiredParameters() {
