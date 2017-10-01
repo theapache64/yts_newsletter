@@ -7,6 +7,10 @@
         <element id="directory" name="classes">
           <element id="module-output" name="yts_newsletter" />
           <element id="module-output" name="webengine" />
+          <element id="module-output" name="yts_api" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="application" name="json" />
         </element>
       </element>
     </root>
