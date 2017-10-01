@@ -47,7 +47,13 @@ public class MailHelper {
         Message mimeMessage = new MimeMessage(session);
         try {
             mimeMessage.setFrom(new InternetAddress(gmailUsername));
-            mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            if (to.contains(",")) {
+                //Bulk mail
+                mimeMessage.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(to));
+            } else {
+                //Single mail
+                mimeMessage.setRecipient(Message.RecipientType.TO, InternetAddress.parse(to)[0]);
+            }
             mimeMessage.setSubject(subject);
             mimeMessage.setText(message);
 

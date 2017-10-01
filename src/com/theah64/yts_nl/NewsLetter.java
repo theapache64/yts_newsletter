@@ -44,7 +44,7 @@ public class NewsLetter {
                 sb.append("\nYts URL:").append(ytsMovie.getYtsUrl());
                 sb.append("\n----------------------------------");
             }
-            return null;
+            return this;
         }
 
         public NewsLetter build() {

@@ -56,6 +56,7 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
         }
 
         if (!newMovies.isEmpty()) {
+
             System.out.println(newMovies.size() + " new movies found");
 
             //TODO: Building newsletter here
@@ -65,6 +66,16 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
 
             //TODO: Send to subscribers
             final List<Subscription> subscriptions = Subscriptions.getInstance().getAllValidSubscriptions();
+            if (subscriptions != null) {
+                final StringBuilder sb = new StringBuilder();
+                for (final Subscription subscription : subscriptions) {
+                    sb.append(subscription.getEmail()).append(",");
+                }
+
+                MailHelper.sendMail(sb.toString(), "New movies added", newsLetter.getHtml());
+            } else {
+                throw new RequestException("No subsribers found");
+            }
 
         } else {
             throw new RequestException("No new movies found in yts.ag");
