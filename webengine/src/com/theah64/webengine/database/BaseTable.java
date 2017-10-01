@@ -31,6 +31,10 @@ public class BaseTable<T> {
         return countMap;
     }
 
+    public String getTableName() {
+        return tableName;
+    }
+
     protected static String[] getGroupDecatenated(String data) {
         if (data != null) {
             return data.split(",");
@@ -215,6 +219,7 @@ public class BaseTable<T> {
 
     public boolean manageError(String error) throws SQLException {
         if (error != null) {
+            System.out.println("Error is " + error);
             throw new SQLException(error);
         }
         return true;

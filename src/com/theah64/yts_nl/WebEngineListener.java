@@ -1,5 +1,6 @@
 package com.theah64.yts_nl;
 
+import com.theah64.webengine.utils.MailHelper;
 import com.theah64.webengine.utils.WebEngineConfig;
 
 import javax.servlet.ServletContextEvent;
@@ -16,6 +17,7 @@ public class WebEngineListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         System.out.println("WebEngine config initialized");
         WebEngineConfig.init("jdbc/yts_newsletterLocal", "jdbc/yts_newsletterRemote");
+        MailHelper.init(SecretConstants.GMAIL_USERNAME, SecretConstants.GMAIL_PASSWORD);
     }
 
     @Override
