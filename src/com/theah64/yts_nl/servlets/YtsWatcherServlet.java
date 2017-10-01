@@ -56,7 +56,7 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
             //TODO: Building newsletter here
             //TODO: Send to subscribers
         } else {
-            System.out.println("No new movies found in yts.ag");
+            throw new RequestException("No new movies found in yts.ag");
         }
 
     }

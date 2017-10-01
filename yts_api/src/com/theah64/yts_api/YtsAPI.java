@@ -37,7 +37,7 @@ public class YtsAPI {
                                 jaItem.getString("medium_cover_image"),
                                 String.valueOf(jaItem.getInt("year")),
                                 String.valueOf(jaItem.getDouble("rating")),
-                                jaItem.getJSONArray("genres").toString(),
+                                YtsAPI.toString(jaItem.getJSONArray("genres")),
                                 jaItem.getString("url")
                         );
                     }
@@ -48,6 +48,14 @@ public class YtsAPI {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static String toString(JSONArray jsonArray) throws JSONException {
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            sb.append(jsonArray.getString(i)).append(",");
+        }
+        return sb.substring(0, sb.length() - 1);
     }
 
     private static String getNetworkResponse(String url) {
