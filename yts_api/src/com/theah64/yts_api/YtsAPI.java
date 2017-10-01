@@ -10,9 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +33,7 @@ public class YtsAPI {
                     public YtsMovie get(JSONObject jaItem) throws JSONException {
                         return new YtsMovie(
                                 jaItem.getString("title"),
+                                jaItem.getString("imdb_code"),
                                 jaItem.getString("medium_cover_image"),
                                 String.valueOf(jaItem.getInt("year")),
                                 String.valueOf(jaItem.getDouble("rating")),

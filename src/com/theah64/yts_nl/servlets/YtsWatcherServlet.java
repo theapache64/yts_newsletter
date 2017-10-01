@@ -4,6 +4,7 @@ import com.theah64.webengine.servlets.AdvancedBaseServlet;
 import com.theah64.webengine.utils.RequestException;
 import com.theah64.yts_api.YtsAPI;
 import com.theah64.yts_api.models.YtsMovie;
+import com.theah64.yts_nl.database.Movies;
 import org.json.JSONException;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,8 +37,26 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
 
         //Getting all latest movies
         final List<YtsMovie> ytsMovies = YtsAPI.listMovies();
+        final List<YtsMovie> newMovies = new ArrayList<>();
+        final Movies moviesTable = Movies.getInstance();
+
         for (YtsMovie ytsMovie : ytsMovies) {
-            System.out.println(ytsMovie);
+            final boolean isExistInDB = moviesTable.get(Movies.COLUMN_IMDB_ID, ytsMovie.getImdbId(), Movies.COLUMN_ID, false) != null;
+            if (!isExistInDB) {
+                //Added to news letter list
+                newMovies.add(ytsMovie);
+
+                //Adding to db
+                moviesTable.add(ytsMovie);
+            }
+        }
+
+        if (!newMovies.isEmpty()) {
+            System.out.println(newMovies.size() + " new movies found");
+            //TODO: Building newsletter here
+            //TODO: Send to subscribers
+        } else {
+            System.out.println("No new movies found in yts.ag");
         }
 
     }

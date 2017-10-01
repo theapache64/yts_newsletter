@@ -4,15 +4,20 @@ package com.theah64.yts_api.models;
  * Created by theapache64 on 1/10/17.
  */
 public class YtsMovie {
-    private final String title, imageUrl, year, imdbRating, genre, ytsUrl;
+    private final String title, imdbId, imageUrl, year, imdbRating, genre, ytsUrl;
 
-    public YtsMovie(String title, String imageUrl, String year, String imdbRating, String genre, String ytsUrl) {
+    public YtsMovie(String title, String imdbId, String imageUrl, String year, String imdbRating, String genre, String ytsUrl) {
         this.title = title;
+        this.imdbId = imdbId;
         this.imageUrl = imageUrl;
         this.year = year;
         this.imdbRating = imdbRating;
         this.genre = genre;
         this.ytsUrl = ytsUrl;
+    }
+
+    public String getImdbId() {
+        return imdbId;
     }
 
     public String getTitle() {

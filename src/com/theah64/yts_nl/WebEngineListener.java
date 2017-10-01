@@ -14,6 +14,7 @@ public class WebEngineListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
+        System.out.println("WebEngine config initialized");
         WebEngineConfig.init("jdbc/yts_newsletterLocal", "jdbc/yts_newsletterRemote");
     }
 
