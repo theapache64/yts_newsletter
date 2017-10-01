@@ -5,7 +5,11 @@ import com.theah64.webengine.database.Connection;
 import com.theah64.yts_nl.models.Subscription;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by theapache64 on 1/10/17.
@@ -87,5 +91,32 @@ public class Subscriptions extends BaseTable<Subscription> {
             throw new SQLException("Failed to update subscription");
         }
         return isEdited;
+    }
+
+    public List<Subscription> getAllValidSubscriptions() {
+        List<Subscription> subscriptions = null;
+        final String query = "SELECT email FROM subscriptions WHERE is_active = 1 AND is_verified=1;";
+        final java.sql.Connection con = Connection.getConnection();
+        try {
+            final Statement stmt = con.createStatement();
+            final ResultSet rs = stmt.executeQuery(query);
+            if (rs.first()) {
+                subscriptions = new ArrayList<>();
+                do {
+                    subscriptions.add(new Subscription(rs.getString("email"), null, true, true));
+                } while (rs.next());
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return subscriptions;
     }
 }

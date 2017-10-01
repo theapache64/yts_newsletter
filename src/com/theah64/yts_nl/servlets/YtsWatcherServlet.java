@@ -1,10 +1,14 @@
 package com.theah64.yts_nl.servlets;
 
 import com.theah64.webengine.servlets.AdvancedBaseServlet;
+import com.theah64.webengine.utils.MailHelper;
 import com.theah64.webengine.utils.RequestException;
 import com.theah64.yts_api.YtsAPI;
 import com.theah64.yts_api.models.YtsMovie;
+import com.theah64.yts_nl.NewsLetter;
 import com.theah64.yts_nl.database.Movies;
+import com.theah64.yts_nl.database.Subscriptions;
+import com.theah64.yts_nl.models.Subscription;
 import org.json.JSONException;
 
 import javax.servlet.ServletException;
@@ -53,8 +57,15 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
 
         if (!newMovies.isEmpty()) {
             System.out.println(newMovies.size() + " new movies found");
+
             //TODO: Building newsletter here
+            final NewsLetter newsLetter = new NewsLetter.Builder()
+                    .addMovies(newMovies)
+                    .build();
+
             //TODO: Send to subscribers
+            final List<Subscription> subscriptions = Subscriptions.getInstance().getAllValidSubscriptions();
+
         } else {
             throw new RequestException("No new movies found in yts.ag");
         }
