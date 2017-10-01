@@ -1,8 +1,10 @@
 package com.theah64.yts_nl.servlets;
 
 import com.theah64.webengine.servlets.AdvancedBaseServlet;
+import com.theah64.webengine.utils.CommonUtils;
 import com.theah64.webengine.utils.MailHelper;
 import com.theah64.webengine.utils.RequestException;
+import com.theah64.webengine.utils.Response;
 import com.theah64.yts_api.YtsAPI;
 import com.theah64.yts_api.models.YtsMovie;
 import com.theah64.yts_nl.NewsLetter;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,49 +40,63 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
     }
 
     @Override
-    protected void doAdvancedPost() throws JSONException, SQLException, RequestException, IOException, ServletException, RequestException {
+    protected void doAdvancedPost() throws JSONException, SQLException, IOException, ServletException, RequestException {
+
+        System.out.println(new Date());
 
         //Getting all latest movies
         final List<YtsMovie> ytsMovies = YtsAPI.listMovies();
-        final List<YtsMovie> newMovies = new ArrayList<>();
-        final Movies moviesTable = Movies.getInstance();
+        if (ytsMovies != null) {
+            final List<YtsMovie> newMovies = new ArrayList<>();
+            final Movies moviesTable = Movies.getInstance();
 
-        for (YtsMovie ytsMovie : ytsMovies) {
-            final boolean isExistInDB = moviesTable.get(Movies.COLUMN_IMDB_ID, ytsMovie.getImdbId(), Movies.COLUMN_ID, false) != null;
-            if (!isExistInDB) {
-                //Added to news letter list
-                newMovies.add(ytsMovie);
+            for (YtsMovie ytsMovie : ytsMovies) {
+                final boolean isExistInDB = moviesTable.get(Movies.COLUMN_IMDB_ID, ytsMovie.getImdbId(), Movies.COLUMN_ID, false) != null;
+                if (!isExistInDB) {
+                    //Added to news letter list
+                    newMovies.add(ytsMovie);
 
-                //Adding to db
-                moviesTable.add(ytsMovie);
+                    //Adding to db
+                    moviesTable.add(ytsMovie);
+                }
             }
-        }
 
-        if (!newMovies.isEmpty()) {
+            final int totalNewMovies = newMovies.size();
 
-            System.out.println(newMovies.size() + " new movies found");
+            if (totalNewMovies > 0) {
 
-            //TODO: Building newsletter here
-            final NewsLetter newsLetter = new NewsLetter.Builder()
-                    .addMovies(newMovies)
-                    .build();
+                System.out.println(totalNewMovies + " new movies found");
 
-            //TODO: Send to subscribers
-            final List<Subscription> subscriptions = Subscriptions.getInstance().getAllValidSubscriptions();
-            if (subscriptions != null) {
-                final StringBuilder sb = new StringBuilder();
-                for (final Subscription subscription : subscriptions) {
-                    sb.append(subscription.getEmail()).append(",");
+                //Building newsletter here
+                final NewsLetter newsLetter = new NewsLetter.Builder()
+                        .addMovies(newMovies)
+                        .build();
+
+                // Send to subscribers
+                final List<Subscription> subscriptions = Subscriptions.getInstance().getAllValidSubscriptions();
+                if (subscriptions != null) {
+                    final StringBuilder sb = new StringBuilder();
+                    for (final Subscription subscription : subscriptions) {
+                        sb.append(subscription.getEmail()).append(",");
+                    }
+
+                    MailHelper.sendMail(sb.toString(), String.format("%d new %s found", totalNewMovies, CommonUtils.getProper(totalNewMovies, "movie", "movies")), newsLetter.getHtml());
+
+                    //Newsletter report
+                    final String report = "Movies found: " + totalNewMovies + "\nLetters sent:" + subscriptions.size();
+                    MailHelper.sendMail("theapache64@gmail.com", "YTS Newsletter report", report);
+
+                    getWriter().write(new Response(report, null).getResponse());
+
+                } else {
+                    throw new RequestException("No subscribers found");
                 }
 
-                MailHelper.sendMail(sb.toString(), "New movies added", newsLetter.getHtml());
             } else {
-                throw new RequestException("No subsribers found");
+                throw new RequestException("No new movies found in yts.ag");
             }
-
         } else {
-            throw new RequestException("No new movies found in yts.ag");
+            throw new RequestException("Failed to get movie list");
         }
-
     }
 }
