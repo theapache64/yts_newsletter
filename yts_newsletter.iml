@@ -22,5 +22,6 @@
     <orderEntry type="library" name="jmsm" level="application" />
     <orderEntry type="module" module-name="webengine" />
     <orderEntry type="module" module-name="yts_api" />
+    <orderEntry type="library" name="json" level="application" />
   </component>
 </module>
