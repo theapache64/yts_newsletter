@@ -64,6 +64,16 @@
         img#yts_logo {
             padding: 22px;
         }
+
+        img.poster {
+            border: 3px solid white;
+            border-radius: 10px;
+        }
+
+        div.movie div.movie_details{
+            position: relative;
+        }
+
     </style>
 </head>
 <body>
@@ -71,8 +81,20 @@
     <img id="yts_logo" src="yts_logo.png">
 </div>
 <div id="body">
-    <p id="verify_instruction">To verify your <b>YTS</b> newsletter subscription, please click below button.</p><br><br>
-    <a id="verification_link" href="#">Verify</a>
+    <p id="verify_instruction" style="font-weight: 600">20 new movies found</p><br><br>
+
+    <!--Movies-->
+    <div id="movies">
+        <div class="movie">
+            <!--Poster-->
+            <img class="poster" src="https://yts.ag/assets/images/movies/spider_man_homecoming_2017/medium-cover.jpg"/>
+
+            <div class="movie_details">
+                <p class="movie_name">Spider-Man: Homecoming</p>
+            </div>
+        </div>
+    </div>
+
 </div>
 <div id="footer">
     <p id="credits"><a target="_blank" href="http://github.com/theapache64/yts_newsletter"> A Github Project</a></p>
