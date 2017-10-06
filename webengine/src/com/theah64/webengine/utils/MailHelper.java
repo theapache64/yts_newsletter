@@ -1,9 +1,12 @@
 package com.theah64.webengine.utils;
 
 
+import com.theah64.webengine.exceptions.MailException;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 /**
@@ -18,7 +21,8 @@ public class MailHelper {
         MailHelper.gmailPassword = gmailPassword;
     }
 
-    public static boolean sendMail(String to, final String subject, String message) {
+    public static void
+    sendMail(String to, final String subject, String message) throws MailException {
 
         if (gmailUsername == null || gmailPassword == null) {
             throw new IllegalArgumentException("Gmail username and password shouldn't be null");
@@ -46,7 +50,7 @@ public class MailHelper {
 
         Message mimeMessage = new MimeMessage(session);
         try {
-            mimeMessage.setFrom(new InternetAddress(gmailUsername));
+            mimeMessage.setFrom(new InternetAddress(gmailUsername, "YTS Newsletter"));
             if (to.contains(",")) {
                 //Bulk mail
                 mimeMessage.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(to));
@@ -55,18 +59,20 @@ public class MailHelper {
                 mimeMessage.setRecipient(Message.RecipientType.TO, InternetAddress.parse(to)[0]);
             }
             mimeMessage.setSubject(subject);
-            mimeMessage.setText(message);
+            mimeMessage.setContent(message, "text/html; charset=utf-8");
 
             Transport.send(mimeMessage);
             System.out.println("Mail sent :" + message);
-            return true;
-        } catch (MessagingException e) {
+        } catch (MessagingException | UnsupportedEncodingException e) {
             e.printStackTrace();
+            throw new MailException(e.getMessage());
         }
 
-        System.out.println("Failed to send mail");
-
-        return false;
     }
 
+    private static final String VERIFICATION_EMAIL = "<html style=\"margin: 0 auto;padding: 0;\"> <head style=\"margin: 0 auto;padding: 0;\"> <link href=\"https://fonts.googleapis.com/css?family=Roboto:400,500,700\" rel=\"stylesheet\" style=\"margin: 0 auto;padding: 0;\"> <style style=\"margin: 0 auto;padding: 0;\"> * { margin: 0 auto; padding: 0; } p, a { font-family: 'Roboto', sans-serif; } body { background: #171717; } div#body { text-align: center; color: white; padding: 50px; height: 158px; } a { text-decoration: none; } a#verification_link { background: #6ac045; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; color: white !important; padding: 8px 34px; font-weight: 800; } div#header { background-color: #1d1d1d; width: 100%; height: 80px; border-bottom: 1px solid #2f2f2f; } div#footer { background-color: #1d1d1d; width: 100%; text-align: center; border-top: 1px solid #2f2f2f; position: absolute; bottom: 0px; } p#credits { padding: 10px; color: #565656; } p#credits a { color: #565656; } img#yts_logo { padding: 22px; } </style> </head> <body style=\"margin: 0 auto;padding: 0;background: #171717;\"> <div id=\"header\" style=\"margin: 0 auto;padding: 0;background-color: #1d1d1d;width: 100%;height: 80px;border-bottom: 1px solid #2f2f2f;\"> <img id=\"yts_logo\" src=\"http://theapache64.xyz:8080/yts_newsletter/yts_logo.png\" style=\"margin: 0 auto;padding: 22px;\"> </div> <div id=\"body\" style=\"margin: 0 auto;padding: 50px;text-align: center;color: white;height: 158px;\"> <p id=\"verify_instruction\" style=\"margin: 0 auto;padding: 0;font-family: 'Roboto', sans-serif;\">To verify your <b style=\"margin: 0 auto;padding: 0;\">YTS</b> newsletter subscription, please click below button.</p><br style=\"margin: 0 auto;padding: 0;\"><br style=\"margin: 0 auto;padding: 0;\"> <a id=\"verification_link\" href=\"VERIFICATION_LINK\" style=\"margin: 0 auto;padding: 8px 34px;font-family: 'Roboto', sans-serif;text-decoration: none;background: #6ac045;border-radius: 3px;-webkit-border-radius: 3px;-moz-border-radius: 3px;font-weight: 800;color: white !important;\">Verify</a> </div> <div id=\"footer\" style=\"margin: 0 auto;padding: 0;background-color: #1d1d1d;width: 100%;text-align: center;border-top: 1px solid #2f2f2f;position: absolute;bottom: 0px;\"> <p id=\"credits\" style=\"margin: 0 auto;padding: 10px;font-family: 'Roboto', sans-serif;color: #565656;\"><a target=\"_blank\" href=\"http://github.com/theapache64/yts_newsletter\" style=\"margin: 0 auto;padding: 0;font-family: 'Roboto', sans-serif;text-decoration: none;color: #565656;\"> A Github Project</a></p> </div> </body> </html>";
+
+    public static String getVerificationHtml(String verificationLink) {
+        return VERIFICATION_EMAIL.replace("VERIFICATION_LINK", verificationLink);
+    }
 }

@@ -44,7 +44,7 @@ public class Subscriptions extends BaseTable<Subscription> {
         } catch (SQLException e) {
             e.printStackTrace();
             if (e.getMessage().equals(String.format("Duplicate entry '%s' for key '%s'", subscription.getEmail(), COLUMN_EMAIL))) {
-                error = "Email already exist";
+                error = "Email already exist. If you are already subscribed, search for the verification mail in your inbox.";
             } else {
                 error = e.getMessage();
             }

@@ -1,5 +1,6 @@
 package com.theah64.yts_nl.servlets;
 
+import com.theah64.webengine.exceptions.MailException;
 import com.theah64.webengine.servlets.AdvancedBaseServlet;
 import com.theah64.webengine.utils.CommonUtils;
 import com.theah64.webengine.utils.MailHelper;
@@ -68,7 +69,7 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
                 System.out.println(totalNewMovies + " new movies found");
 
                 //Building newsletter here
-                final NewsLetter newsLetter = new NewsLetter.Builder()
+                final NewsLetter newsLetter = new NewsLetter.Builder(totalNewMovies)
                         .addMovies(newMovies)
                         .build();
 
@@ -80,13 +81,20 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
                         sb.append(subscription.getEmail()).append(",");
                     }
 
-                    MailHelper.sendMail(sb.toString(), String.format("%d new %s found", totalNewMovies, CommonUtils.getProper(totalNewMovies, "movie", "movies")), newsLetter.getHtml());
+                    try {
+                        MailHelper.sendMail(sb.toString(), String.format("%d new %s found", totalNewMovies, CommonUtils.getProper(totalNewMovies, "movie", "movies")), newsLetter.getHtml());
 
-                    //Newsletter report
-                    final String report = "Movies found: " + totalNewMovies + "\nLetters sent:" + subscriptions.size();
-                    MailHelper.sendMail("theapache64@gmail.com", "YTS Newsletter report", report);
+                        //Newsletter report
+                        final String report = "Movies found: " + totalNewMovies + "\nLetters sent:" + subscriptions.size();
+                        MailHelper.sendMail("theapache64@gmail.com", "YTS Newsletter report", report);
 
-                    getWriter().write(new Response(report, null).getResponse());
+                        getWriter().write(new Response(report, null).getResponse());
+
+                    } catch (MailException e) {
+                        e.printStackTrace();
+                        throw new RequestException(e.getMessage());
+                    }
+
 
                 } else {
                     throw new RequestException("No subscribers found");

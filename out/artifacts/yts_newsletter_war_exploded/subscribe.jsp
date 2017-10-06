@@ -1,9 +1,10 @@
+<%@ page import="com.theah64.webengine.exceptions.MailException" %>
 <%@ page import="com.theah64.webengine.utils.Form" %>
-<%@ page import="com.theah64.yts_nl.database.Subscriptions" %>
+<%@ page import="com.theah64.webengine.utils.MailHelper" %>
 <%@ page import="com.theah64.webengine.utils.RandomString" %>
+<%@ page import="com.theah64.yts_nl.database.Subscriptions" %>
 <%@ page import="com.theah64.yts_nl.models.Subscription" %>
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="com.theah64.webengine.utils.MailHelper" %><%--
+<%@ page import="java.sql.SQLException" %><%--
   Created by IntelliJ IDEA.
   User: theapache64
   Date: 24/9/17
@@ -55,7 +56,9 @@
 </body>
 </html>
 
+
 <%
+
     final Form form = new Form(request);
     if (form.isSubmitted()) {
         final String email = form.getString(Subscriptions.COLUMN_EMAIL);
@@ -67,8 +70,8 @@
                 Subscriptions.getInstance().add(subscription);
 
                 //Sending verification mail
-                MailHelper.sendMail(email, "YTS Newsletter", "Your verification link is " + getVerificationLink(subscription));
-            } catch (SQLException e) {
+                MailHelper.sendMail(email, "YTS Newsletter subscription", MailHelper.getVerificationHtml(getVerificationLink(subscription)));
+            } catch (SQLException | MailException e) {
                 e.printStackTrace();
                 response.sendRedirect("result.jsp?title=Error&message=" + e.getMessage());
                 return;
@@ -81,6 +84,6 @@
 %>
 <%!
     private String getVerificationLink(Subscription subscription) {
-        return String.format("http://localhost:8080/yts_newsletter/verify.jsp?email=%s&verification_code=%s", subscription.getEmail(), subscription.getVerificationCode());
+        return String.format("http://theapache64.xyz:8080/yts_newsletter/verify.jsp?email=%s&verification_code=%s", subscription.getEmail(), subscription.getVerificationCode());
     }
 %>
