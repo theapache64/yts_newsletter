@@ -35,6 +35,7 @@ public class NewsLetter {
          * @return
          */
         public Builder addMovies(List<YtsMovie> newMovies) {
+
             for (final YtsMovie ytsMovie : newMovies) {
                 sb.append("\nTitle:").append(ytsMovie.getTitle());
                 sb.append("\nImage:").append(ytsMovie.getImageUrl());
@@ -47,7 +48,7 @@ public class NewsLetter {
         }
 
         public NewsLetter build() {
-            sb.append("\nA Github project");
+            sb.append("</div> </div> <div id=\"footer\" style=\"width: 100%; text-align: center; border-top-color: #2f2f2f; border-top-width: 1px; border-top-style: solid; position: absolute; bottom: 0px; background-color: #1d1d1d; margin: 0 auto; padding: 0;\" align=\"center\"> <p id=\"credits\" style=\"font-family: 'Roboto', sans-serif; color: #565656; margin: 0 auto; padding: 10px;\"><a target=\"_blank\" href=\"http://github.com/theapache64/yts_newsletter\" style=\"font-family: 'Roboto', sans-serif; text-decoration: none; color: #565656; margin: 0 auto; padding: 0;\"> A Github Project</a></p> </div> </body> </html>");
             return new NewsLetter(sb.toString());
         }
     }
