@@ -26,15 +26,6 @@
             text-decoration: none;
         }
 
-        a#verification_link {
-            background: #6ac045;
-            border-radius: 3px;
-            -webkit-border-radius: 3px;
-            -moz-border-radius: 3px;
-            color: white !important;
-            padding: 8px 34px;
-            font-weight: 800;
-        }
 
         div#header {
             background-color: #1d1d1d;
@@ -68,10 +59,47 @@
         img.poster {
             border: 3px solid white;
             border-radius: 10px;
+            float: left;
         }
 
-        div.movie div.movie_details{
-            position: relative;
+        div.movie_details {
+            text-align: left;
+        }
+
+        p.movie_name {
+            font-weight: 600;
+            font-size: 29px;
+        }
+        p.imdb_rating{
+            font-size: 72px;
+            font-weight: 600;
+        }
+
+        p.year {
+            color: #b5b5b5;
+        }
+
+        a.yts_link {
+            background: #6ac045;
+            border-radius: 3px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            color: white !important;
+            padding: 1px 15px;
+            font-weight: 800;
+        }
+
+        p.imdb_rating a{
+            color: white;
+        }
+
+        .movie{
+            width: 100%;
+            height: 400px;
+        }
+
+        img.poster{
+            margin-right: 10px;
         }
 
     </style>
@@ -81,18 +109,29 @@
     <img id="yts_logo" src="yts_logo.png">
 </div>
 <div id="body">
-    <p id="verify_instruction" style="font-weight: 600">20 new movies found</p><br><br>
+    <p style="font-weight: 600;color: #4a4a4a;font-size: 20px;">20 new movies found</p>
+
+    <br>
+    <br>
 
     <!--Movies-->
     <div id="movies">
+
         <div class="movie">
             <!--Poster-->
             <img class="poster" src="https://yts.ag/assets/images/movies/spider_man_homecoming_2017/medium-cover.jpg"/>
 
             <div class="movie_details">
                 <p class="movie_name">Spider-Man: Homecoming</p>
+                <p class="year">2017</p>
+                <p class="genres">Action / Drama / History / Thriller</p>
+                <p class="imdb_rating"><a target="_blank" href="http://imdb.com/title/tt1300854/"> <img src="logo-imdb.png"/> 6.5</a></p>
+                <p class="yts_link"><a target="_blank" class="yts_link" href="#">View</a></p>
             </div>
         </div>
+
+        <br>
+
     </div>
 
 </div>
