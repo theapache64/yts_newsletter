@@ -1,6 +1,8 @@
 package com.theah64.webengine.database;
 
 
+import com.sun.istack.internal.Nullable;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -194,12 +196,28 @@ public class BaseTable<T> {
     }
 
     public final boolean delete(final String whereColumn, final String whereColumnValue) {
+        return delete(whereColumn, whereColumnValue, null, null);
+
+    }
+
+    public final boolean delete(final String whereColumn, final String whereColumnValue, @Nullable final String whereColumn2, @Nullable final String whereColumnValue2) {
         boolean isDeleted = false;
-        final String query = String.format("DELETE FROM %s WHERE %s = ?", tableName, whereColumn);
+        String query = null;
+        if (whereColumn2 == null) {
+            query = String.format("DELETE FROM %s WHERE %s = ?", tableName, whereColumn);
+        } else {
+            query = String.format("DELETE FROM %s WHERE %s = ? AND %s = ?", tableName, whereColumn, whereColumn2);
+        }
+
         final java.sql.Connection con = Connection.getConnection();
         try {
             final PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, whereColumnValue);
+            if (whereColumn2 == null) {
+                ps.setString(1, whereColumnValue);
+            } else {
+                ps.setString(1, whereColumnValue);
+                ps.setString(2, whereColumnValue2);
+            }
             isDeleted = ps.executeUpdate() > 0;
             ps.close();
         } catch (SQLException e) {

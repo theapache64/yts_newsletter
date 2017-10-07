@@ -26,6 +26,11 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
     private Request request;
     private PrintWriter out;
     private HttpServletRequest httpServletRequest;
+    private HttpServletResponse httpServletResponse;
+
+    public HttpServletResponse getHttpServletResponse() {
+        return httpServletResponse;
+    }
 
     protected static void setGETMethodNotSupported(HttpServletResponse response) throws IOException {
         notSupported(ERROR_GET_NOT_SUPPORTED, response);
@@ -51,6 +56,7 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType(getContentType());
         this.httpServletRequest = req;
+        this.httpServletResponse = resp;
         out = resp.getWriter();
 
         try {

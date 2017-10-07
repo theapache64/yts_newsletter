@@ -1,4 +1,4 @@
-package com.theah64.yts_nl;
+package com.theah64.yts_nl.misc;
 
 import com.theah64.webengine.utils.MailHelper;
 import com.theah64.webengine.utils.WebEngineConfig;

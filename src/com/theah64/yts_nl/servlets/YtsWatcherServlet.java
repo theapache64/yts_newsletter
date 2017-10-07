@@ -8,7 +8,7 @@ import com.theah64.webengine.utils.RequestException;
 import com.theah64.webengine.utils.Response;
 import com.theah64.yts_api.YtsAPI;
 import com.theah64.yts_api.models.YtsMovie;
-import com.theah64.yts_nl.NewsLetter;
+import com.theah64.yts_nl.misc.NewsLetter;
 import com.theah64.yts_nl.database.Movies;
 import com.theah64.yts_nl.database.Subscriptions;
 import com.theah64.yts_nl.models.Subscription;
