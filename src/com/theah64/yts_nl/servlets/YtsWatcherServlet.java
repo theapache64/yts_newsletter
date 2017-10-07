@@ -8,9 +8,11 @@ import com.theah64.webengine.utils.RequestException;
 import com.theah64.webengine.utils.Response;
 import com.theah64.yts_api.YtsAPI;
 import com.theah64.yts_api.models.YtsMovie;
-import com.theah64.yts_nl.misc.NewsLetter;
+import com.theah64.yts_nl.database.LettersSent;
 import com.theah64.yts_nl.database.Movies;
 import com.theah64.yts_nl.database.Subscriptions;
+import com.theah64.yts_nl.misc.NewsLetter;
+import com.theah64.yts_nl.models.LetterSent;
 import com.theah64.yts_nl.models.Subscription;
 import org.json.JSONException;
 
@@ -84,10 +86,11 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
                     try {
                         MailHelper.sendMail(sb.toString(), String.format("%d new %s found", totalNewMovies, CommonUtils.getProper(totalNewMovies, "movie", "movies")), newsLetter.getHtml());
 
+                        //Storing report
+                        LettersSent.getInstance().add(new LetterSent(subscriptions.size(), totalNewMovies));
+
                         //Newsletter report
                         final String report = "Movies found: " + totalNewMovies + "\nLetters sent:" + subscriptions.size();
-                        MailHelper.sendMail("theapache64@gmail.com", "YTS Newsletter report", report);
-
                         getWriter().write(new Response(report, null).getResponse());
 
                     } catch (MailException e) {
