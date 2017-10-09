@@ -11,8 +11,8 @@ public class RandomString {
     private static final String randomEngine = "0123456789AaBbCcDdEeFfGgHhIiJjKkLkMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
     private static Random random;
 
-    public static String get(final int apiKeyLength) {
-        return getRandomString(apiKeyLength);
+    public static String get(final int length) {
+        return getRandomString(length);
     }
 
 
