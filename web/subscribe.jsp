@@ -63,10 +63,12 @@
     if (form.isSubmitted()) {
         final String email = form.getString(Subscriptions.COLUMN_EMAIL);
         if (email.matches(Form.EMAIL_REGEX)) {
+
             //Valid email. adding to subscription list
             final String verificationCode = RandomString.get(20);
             final Subscription subscription = new Subscription(email, verificationCode, false, true);
             try {
+                
                 Subscriptions.getInstance().add(subscription);
 
                 //Sending verification mail
@@ -79,6 +81,7 @@
 
             response.sendRedirect("result.jsp?title=Subscribed&message=We've sent a verification link to your email. Please check your inbox to complete the subscription");
             return;
+
         }
     }
 %>

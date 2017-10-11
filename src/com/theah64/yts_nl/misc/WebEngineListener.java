@@ -16,7 +16,7 @@ public class WebEngineListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         System.out.println("WebEngine config initialized");
-        WebEngineConfig.init("jdbc/yts_newsletterLocal", "jdbc/yts_newsletterRemote");
+        WebEngineConfig.init("jdbc/yts_newsletterLocal", "jdbc/yts_newsletterRemote", false);
         MailHelper.init(SecretConstants.GMAIL_USERNAME, SecretConstants.GMAIL_PASSWORD);
     }
 

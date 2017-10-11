@@ -2,6 +2,7 @@ package com.theah64.webengine.database;
 
 
 import com.sun.istack.internal.Nullable;
+import com.theah64.webengine.utils.RequestException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -241,6 +242,10 @@ public class BaseTable<T> {
             throw new SQLException(error);
         }
         return true;
+    }
+
+    public List<T> getLast(int count) throws RequestException {
+        return null;
     }
 }
 

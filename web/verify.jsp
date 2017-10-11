@@ -1,8 +1,14 @@
+<%@ page import="com.theah64.webengine.exceptions.MailException" %>
+<%@ page import="com.theah64.webengine.utils.MailHelper" %>
 <%@ page import="com.theah64.webengine.utils.Request" %>
 <%@ page import="com.theah64.webengine.utils.RequestException" %>
+<%@ page import="com.theah64.yts_api.models.YtsMovie" %>
+<%@ page import="com.theah64.yts_nl.database.Movies" %>
 <%@ page import="com.theah64.yts_nl.database.Subscriptions" %>
+<%@ page import="com.theah64.yts_nl.misc.NewsLetter" %>
 <%@ page import="com.theah64.yts_nl.models.Subscription" %>
-<%@ page import="java.sql.SQLException" %><%--
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: theapache64
   Date: 24/9/17
@@ -17,12 +23,23 @@
         try {
             req = new Request(request, new String[]{Subscriptions.COLUMN_EMAIL, Subscriptions.COLUMN_VERIFICATION_CODE});
 
+
+            final String userEmail = req.getStringParameter(Subscriptions.COLUMN_EMAIL);
+
             Subscriptions.getInstance().update(new Subscription(
-                    req.getStringParameter(Subscriptions.COLUMN_EMAIL),
+                    userEmail,
                     req.getStringParameter(Subscriptions.COLUMN_VERIFICATION_CODE),
                     true, true));
 
-        } catch (RequestException | SQLException e) {
+            //Send a sample
+            final List<YtsMovie> movieList = Movies.getInstance().getLast(3);
+            final NewsLetter newsLetter = new NewsLetter.Builder(movieList.size())
+                    .addMovies(movieList)
+                    .build();
+
+            MailHelper.sendMail(userEmail, "YTS Recent movies", newsLetter.getHtml());
+
+        } catch (RequestException | SQLException | MailException e) {
             response.sendRedirect("result.jsp?title=Error&message=" + e.getMessage());
             return;
         }

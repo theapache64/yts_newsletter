@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class Connection {
 
-    public static final boolean debugMode = false;
+
     private static DataSource ds;
 
     public static java.sql.Connection getConnection() {
@@ -24,7 +24,7 @@ public class Connection {
             if (ds == null) {
                 final Context initContext = new InitialContext();
                 Context envContext = (Context) initContext.lookup("java:/comp/env");
-                ds = (DataSource) envContext.lookup(debugMode ? WebEngineConfig.getLocalConfigName() : WebEngineConfig.getRemoteConfigName());
+                ds = (DataSource) envContext.lookup(WebEngineConfig.isDebugMode() ? WebEngineConfig.getLocalConfigName() : WebEngineConfig.getRemoteConfigName());
             }
 
             return ds.getConnection();
@@ -34,8 +34,5 @@ public class Connection {
             throw new IllegalArgumentException("Connection error : " + e.getMessage());
         }
     }
-
-    public static boolean isDebugMode() {
-        return debugMode;
-    }
+    
 }
