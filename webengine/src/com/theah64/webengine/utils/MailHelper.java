@@ -22,7 +22,7 @@ public class MailHelper {
     }
 
     public static void
-    sendMail(String to, final String subject, String message) throws MailException {
+    sendMail(String to, final String subject, String message, String fromName) throws MailException {
 
         if (gmailUsername == null || gmailPassword == null) {
             throw new IllegalArgumentException("Gmail username and password shouldn't be null");
@@ -50,7 +50,7 @@ public class MailHelper {
 
         Message mimeMessage = new MimeMessage(session);
         try {
-            mimeMessage.setFrom(new InternetAddress(gmailUsername, "YTS Newsletter"));
+            mimeMessage.setFrom(new InternetAddress(gmailUsername, fromName));
             if (to.contains(",")) {
                 //Bulk mail
                 mimeMessage.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(to));
