@@ -236,7 +236,7 @@ public class BaseTable<T> {
     }
 
 
-    public boolean manageError(String error) throws SQLException {
+    public static boolean manageError(String error) throws SQLException {
         if (error != null) {
             System.out.println("Error is " + error);
             throw new SQLException(error);
