@@ -97,4 +97,7 @@ public class Request {
         return value != null ? Long.parseLong(value) : -1;
     }
 
+    public String[] getStringParameters(String key) {
+        return request.getParameterValues(key);
+    }
 }

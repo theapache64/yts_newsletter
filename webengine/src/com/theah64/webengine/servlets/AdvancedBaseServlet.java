@@ -4,7 +4,6 @@ package com.theah64.webengine.servlets;
 import com.theah64.webengine.utils.Request;
 import com.theah64.webengine.utils.RequestException;
 import com.theah64.webengine.utils.Response;
-import org.json.JSONException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -80,7 +79,7 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
 
     protected abstract String[] getRequiredParameters();
 
-    protected abstract void doAdvancedPost() throws JSONException, SQLException, RequestException, IOException, ServletException, RequestException;
+    protected abstract void doAdvancedPost() throws SQLException, RequestException, IOException, ServletException, RequestException;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -88,7 +87,11 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
     }
 
     public String getStringParameter(String key) {
-        return request.getStringParameter(key);
+        final String value = request.getStringParameter(key);
+        if (value != null && !value.trim().isEmpty()) {
+            return value;
+        }
+        return null;
     }
 
 
@@ -106,5 +109,19 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
 
     public long getLongParameter(String key) {
         return request.getLongParameter(key);
+    }
+
+
+    public String getStringParameters(String key) {
+        final String[] params = request.getStringParameters(key);
+        StringBuilder sb = null;
+        if (params != null) {
+            sb = new StringBuilder();
+            for (final String value : params) {
+                sb.append(value).append(",");
+            }
+            return sb.substring(0, sb.length() - 1);
+        }
+        return null;
     }
 }

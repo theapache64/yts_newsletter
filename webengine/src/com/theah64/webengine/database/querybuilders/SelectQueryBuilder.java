@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by theapache64 on 27/10/17.
@@ -21,6 +23,9 @@ public class SelectQueryBuilder<T> {
     private String[] whereColumns;
     private String[] whereColumnValues;
     private String orderBy;
+    private ResultSet rs;
+    private Statement stmt;
+    private String sqlError;
 
     public SelectQueryBuilder(String tableName, Callback<T> callback, String[] columns, String[] whereColumns, String[] whereColumnValues, int limit, String orderBy) {
         this.tableName = tableName;
@@ -30,6 +35,50 @@ public class SelectQueryBuilder<T> {
         this.whereColumnValues = whereColumnValues;
         this.limit = limit;
         this.orderBy = orderBy;
+    }
+
+    private String getFullQuery() throws QueryBuilderException {
+
+        StringBuilder queryBuilder = new StringBuilder("SELECT ");
+        if (columns == null) {
+            throw new QueryBuilderException("No columns selected");
+        }
+
+        for (final String column : columns) {
+            queryBuilder.append(column).append(",");
+        }
+
+        //Removing last comma
+        queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - 1));
+
+        queryBuilder.append(" FROM ").append(tableName);
+
+        if (whereColumns != null && whereColumnValues != null) {
+
+            if (whereColumns.length != whereColumnValues.length) {
+                throw new QueryBuilderException("Where section count doesn't match");
+            }
+
+            queryBuilder.append(" WHERE ");
+
+            for (final String wColumn : whereColumns) {
+                queryBuilder.append(wColumn).append(" = ? AND ");
+            }
+
+            //Removing last and
+            //4  = AND .length()
+            queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - 4));
+        }
+
+        if (orderBy != null) {
+            queryBuilder.append("ORDER BY ").append(orderBy);
+        }
+
+        if (limit != -1) {
+            queryBuilder.append(" LIMIT ").append(limit);
+        }
+
+        return queryBuilder.toString();
     }
 
 
@@ -72,98 +121,30 @@ public class SelectQueryBuilder<T> {
             this.orderBy = orderBy;
             return this;
         }
+
     }
 
-    public T done() throws QueryBuilderException, SQLException {
+    public T get() throws QueryBuilderException, SQLException {
 
-        StringBuilder queryBuilder = new StringBuilder("SELECT ");
-        if (columns == null) {
-            throw new QueryBuilderException("No columns selected");
-        }
 
-        for (final String column : columns) {
-            queryBuilder.append(column).append(",");
-        }
-
-        //Removing last comma
-        queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - 1));
-
-        queryBuilder.append(" FROM ").append(tableName);
-
-        if (whereColumns != null && whereColumnValues != null) {
-
-            if (whereColumns.length != whereColumnValues.length) {
-                throw new QueryBuilderException("Where section count doesn't match");
-            }
-
-            queryBuilder.append(" WHERE ");
-
-            for (final String wColumn : whereColumns) {
-                queryBuilder.append(wColumn).append(" = ? AND ");
-            }
-
-            //Removing last and
-            //4  = AND .length()
-            queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - 4));
-        }
-
-        if (orderBy != null) {
-            queryBuilder.append("ORDER BY ").append(orderBy);
-        }
-
-        if (limit != -1) {
-            queryBuilder.append(" LIMIT ").append(limit);
-        }
-
-        //Query built
-        System.out.println("Final query : " + queryBuilder);
-
+        final String fullQuery = getFullQuery();
 
         java.sql.Connection con = Connection.getConnection();
-        ResultSet rs = null;
-        Statement stmt = null;
-        String sqlError = null;
-        if (whereColumns != null) {
+        this.rs = null;
+        this.stmt = null;
+        this.sqlError = null;
 
-            System.out.println("Prepared statement");
-
-            try {
-                final PreparedStatement ps = con.prepareStatement(queryBuilder.toString());
-                for (int i = 1; i <= whereColumnValues.length; i++) {
-                    ps.setString(i, whereColumnValues[i - 1]);
-                }
-                rs = ps.executeQuery();
-                stmt = ps;
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                sqlError = e.getMessage();
-            }
-
-            BaseTable.manageError(sqlError);
-
-        } else {
-            System.out.println("Normal statement");
-            try {
-                stmt = con.createStatement();
-                rs = stmt.executeQuery(queryBuilder.toString());
-            } catch (SQLException e) {
-                e.printStackTrace();
-                sqlError = e.getMessage();
-            }
-            BaseTable.manageError(sqlError);
-        }
+        doDuplicate(con, fullQuery);
 
         T t = null;
 
 
         try {
 
-            if (rs != null) {
-                rs.first();
+            if (rs != null && rs.first()) {
+                t = callback.getNode(rs);
             }
 
-            t = callback.getNode(rs);
 
             if (rs != null) {
                 rs.close();
@@ -187,6 +168,93 @@ public class SelectQueryBuilder<T> {
         BaseTable.manageError(sqlError);
 
         return t;
+    }
+
+    private void doDuplicate(java.sql.Connection con, String fullQuery) throws SQLException {
+
+        if (whereColumns != null) {
+
+            try {
+                final PreparedStatement ps = con.prepareStatement(fullQuery);
+                for (int i = 1; i <= whereColumnValues.length; i++) {
+                    ps.setString(i, whereColumnValues[i - 1]);
+                }
+
+                rs = ps.executeQuery();
+                stmt = ps;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                sqlError = e.getMessage();
+            }
+
+            BaseTable.manageError(sqlError);
+
+        } else {
+
+            try {
+                stmt = con.createStatement();
+                rs = stmt.executeQuery(fullQuery);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                sqlError = e.getMessage();
+            }
+
+            BaseTable.manageError(sqlError);
+        }
+
+    }
+
+    public List<T> getAll() throws SQLException, QueryBuilderException {
+
+
+        final String fullQuery = getFullQuery();
+
+        java.sql.Connection con = Connection.getConnection();
+        this.rs = null;
+        this.stmt = null;
+        this.sqlError = null;
+
+        doDuplicate(con, fullQuery);
+
+        List<T> t = null;
+
+
+        try {
+
+            if (rs != null && rs.first()) {
+
+                t = new ArrayList<T>();
+
+                do {
+                    t.add(callback.getNode(rs));
+                } while (rs.next());
+            }
+
+
+            if (rs != null) {
+                rs.close();
+            }
+
+            if (stmt != null) {
+                stmt.close();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            sqlError = e.getMessage();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        BaseTable.manageError(sqlError);
+
+        return t;
+
     }
 
     public interface Callback<T> {

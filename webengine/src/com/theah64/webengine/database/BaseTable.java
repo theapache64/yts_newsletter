@@ -2,6 +2,7 @@ package com.theah64.webengine.database;
 
 
 import com.sun.istack.internal.Nullable;
+import com.theah64.webengine.database.querybuilders.QueryBuilderException;
 import com.theah64.webengine.utils.RequestException;
 
 import java.sql.PreparedStatement;
@@ -45,7 +46,7 @@ public class BaseTable<T> {
         return null;
     }
 
-    public T get(final String column, final String value) {
+    public T get(final String column, final String value) throws QueryBuilderException, SQLException {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
 
@@ -54,7 +55,7 @@ public class BaseTable<T> {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
 
-    public boolean add(T newInstance) throws SQLException {
+    public boolean add(T newInstance) throws SQLException, QueryBuilderException {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
 
@@ -92,7 +93,7 @@ public class BaseTable<T> {
     }
 
 
-    public boolean update(T t) throws SQLException {
+    public boolean update(T t) throws SQLException, QueryBuilderException {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
 
@@ -163,6 +164,11 @@ public class BaseTable<T> {
     public List<T> getAll(final String whereColumn, final String whereColumnValue) {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
+
+    public List<T> getAll() throws QueryBuilderException, SQLException {
+        throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
+    }
+
 
     public int getTotal(final String victimId) {
 

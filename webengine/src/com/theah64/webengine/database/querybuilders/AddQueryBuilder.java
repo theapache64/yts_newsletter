@@ -28,8 +28,12 @@ public class AddQueryBuilder {
             return this;
         }
 
-        public boolean done() throws SQLException {
+        public boolean done() throws SQLException, QueryBuilderException {
 
+
+            if (map.isEmpty()) {
+                throw new QueryBuilderException("No data in insert query");
+            }
 
             //Building query
             String error = null;

@@ -30,4 +30,6 @@ public class RandomString {
     public static String getRandomFilename(final int fileNameLength, final String fileExtension) {
         return getRandomString(fileNameLength) + fileExtension;
     }
+
+
 }
