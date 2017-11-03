@@ -1,16 +1,13 @@
 package com.theah64.yts_nl.servlets;
 
 import com.theah64.webengine.servlets.AdvancedBaseServlet;
-import com.theah64.webengine.utils.RequestException;
 import com.theah64.yts_nl.database.Subscriptions;
-import org.json.JSONException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * Created by theapache64 on 6/10/17.
@@ -29,7 +26,7 @@ public class UnSubscribeServlet extends AdvancedBaseServlet {
     }
 
     @Override
-    protected void doAdvancedPost() throws JSONException, SQLException, RequestException, IOException, ServletException, RequestException {
+    protected void doAdvancedPost() throws IOException, ServletException {
 
         System.out.println("Hit!");
 

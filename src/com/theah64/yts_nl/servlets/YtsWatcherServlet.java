@@ -14,7 +14,6 @@ import com.theah64.yts_nl.database.Subscriptions;
 import com.theah64.yts_nl.misc.NewsLetter;
 import com.theah64.yts_nl.models.LetterSent;
 import com.theah64.yts_nl.models.Subscription;
-import org.json.JSONException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,7 +42,7 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
     }
 
     @Override
-    protected void doAdvancedPost() throws JSONException, SQLException, IOException, ServletException, RequestException {
+    protected void doAdvancedPost() throws SQLException, IOException, ServletException, RequestException {
 
         System.out.println(new Date());
 
@@ -84,7 +83,7 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
                     }
 
                     try {
-                        MailHelper.sendMail(sb.toString(), String.format("%d new %s found", totalNewMovies, CommonUtils.getProper(totalNewMovies, "movie", "movies")), newsLetter.getHtml());
+                        MailHelper.sendMail(sb.toString(), String.format("%d new %s found", totalNewMovies, CommonUtils.getProper(totalNewMovies, "movie", "movies")), newsLetter.getHtml(), "YTS Newsletter");
 
                         //Storing report
                         LettersSent.getInstance().add(new LetterSent(subscriptions.size(), totalNewMovies));

@@ -22,7 +22,7 @@ public class Lab {
             MailHelper.sendMail("theapache64@gmail.com", "YTS Newsletter",
                     new NewsLetter.Builder(10)
                             .addMovies(movieList)
-                            .build().getHtml()
+                            .build().getHtml(), "YTS Newsletter"
             );
         } catch (MailException e) {
             e.printStackTrace();
