@@ -37,7 +37,7 @@
                     .addMovies(movieList)
                     .build();
 
-            MailHelper.sendMail(userEmail, "YTS Recent movies", newsLetter.getHtml());
+            MailHelper.sendMail(userEmail, "YTS Recent movies", newsLetter.getHtml(), "YTS Newsletter");
 
         } catch (RequestException | SQLException | MailException e) {
             response.sendRedirect("result.jsp?title=Error&message=" + e.getMessage());

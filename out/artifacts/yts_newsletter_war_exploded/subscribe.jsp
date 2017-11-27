@@ -68,11 +68,11 @@
             final String verificationCode = RandomString.get(20);
             final Subscription subscription = new Subscription(email, verificationCode, false, true);
             try {
-                
+
                 Subscriptions.getInstance().add(subscription);
 
                 //Sending verification mail
-                MailHelper.sendMail(email, "YTS Newsletter subscription", MailHelper.getVerificationHtml(getVerificationLink(subscription)));
+                MailHelper.sendMail(email, "YTS Newsletter subscription", MailHelper.getVerificationHtml(getVerificationLink(subscription)), "YTS Newsletter");
             } catch (SQLException | MailException e) {
                 e.printStackTrace();
                 response.sendRedirect("result.jsp?title=Error&message=" + e.getMessage());
@@ -87,6 +87,6 @@
 %>
 <%!
     private String getVerificationLink(Subscription subscription) {
-        return String.format("http://theapache64.xyz:8080/yts_newsletter/verify.jsp?email=%s&verification_code=%s", subscription.getEmail(), subscription.getVerificationCode());
+        return String.format("http://18.220.163.253:8080/yts_newsletter/verify.jsp?email=%s&verification_code=%s", subscription.getEmail(), subscription.getVerificationCode());
     }
 %>

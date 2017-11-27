@@ -79,7 +79,7 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
 
     protected abstract String[] getRequiredParameters();
 
-    protected abstract void doAdvancedPost() throws SQLException, RequestException, IOException, ServletException, RequestException;
+    protected abstract void doAdvancedPost() throws SQLException, IOException, ServletException, RequestException;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -16,9 +16,10 @@ public class WebEngineListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         System.out.println("WebEngine config initialized");
-        WebEngineConfig.init("jdbc/yts_newsletterLocal", "jdbc/yts_newsletterRemote", false,
+        WebEngineConfig.init(
+                "jdbc/yts_newsletterLocal", "jdbc/yts_newsletterRemote", false,
                 "http://localhost:8080/yts_newsletter",
-                "http://theapache64.xyz:8080/yts_newsletter"
+                "http://18.220.163.253:8080/yts_newsletter"
         );
         MailHelper.init(SecretConstants.GMAIL_USERNAME, SecretConstants.GMAIL_PASSWORD);
     }

@@ -13,6 +13,7 @@ import java.util.Map;
  * Created by theapache64 on 9/10/17.
  */
 public class AddQueryBuilder {
+
     public static class Builder {
 
         private final String tableName;
