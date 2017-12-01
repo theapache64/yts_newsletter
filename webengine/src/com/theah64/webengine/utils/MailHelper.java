@@ -21,6 +21,7 @@ public class MailHelper {
         MailHelper.gmailPassword = gmailPassword;
     }
 
+    @SuppressWarnings("SameParameterValue")
     public static void sendMail(String to, final String subject, String message, String fromName) throws MailException {
 
         if (gmailUsername == null || gmailPassword == null) {
