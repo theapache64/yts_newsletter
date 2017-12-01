@@ -51,7 +51,7 @@ public class BaseTable<T> {
     }
 
 
-    public String addv3(T newInstance) {
+    public String addv3(T newInstance) throws QueryBuilderException, SQLException {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
 
@@ -161,7 +161,7 @@ public class BaseTable<T> {
         return isExist;
     }
 
-    public List<T> getAll(final String whereColumn, final String whereColumnValue) {
+    public List<T> getAll(final String whereColumn, final String whereColumnValue) throws QueryBuilderException, SQLException {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
 

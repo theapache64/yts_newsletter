@@ -66,9 +66,11 @@ public class AddQueryBuilder {
                 }
                 ps.executeUpdate();
                 final ResultSet rs = ps.getGeneratedKeys();
+
                 if (rs.first()) {
                     rowId = rs.getLong(1);
                 }
+
                 rs.close();
                 ps.close();
 

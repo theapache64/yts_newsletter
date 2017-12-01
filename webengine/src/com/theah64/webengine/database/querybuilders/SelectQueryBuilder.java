@@ -210,6 +210,8 @@ public class SelectQueryBuilder<T> {
 
         final String fullQuery = getFullQuery();
 
+        System.out.println("FullQuery : " + fullQuery);
+
         java.sql.Connection con = Connection.getConnection();
         this.rs = null;
         this.stmt = null;
@@ -217,7 +219,7 @@ public class SelectQueryBuilder<T> {
 
         doDuplicate(con, fullQuery);
 
-        List<T> t = null;
+        List<T> t = new ArrayList<T>();
 
 
         try {
