@@ -3,6 +3,7 @@ package com.theah64.webengine.database.querybuilders;
 import com.theah64.webengine.database.Connection;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,8 +31,13 @@ public class AddQueryBuilder {
         }
 
         public boolean done() throws SQLException, QueryBuilderException {
+            return doneAndReturn() != -1;
+        }
 
 
+        public long doneAndReturn() throws SQLException, QueryBuilderException {
+
+            long rowId = -1;
             if (map.isEmpty()) {
                 throw new QueryBuilderException("No data in insert query");
             }
@@ -53,12 +59,17 @@ public class AddQueryBuilder {
 
             final java.sql.Connection con = Connection.getConnection();
             try {
-                final PreparedStatement ps = con.prepareStatement(query);
+                final PreparedStatement ps = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
                 int i = 1;
                 for (final Map.Entry<String, String> entry : map.entrySet()) {
                     ps.setString(i++, entry.getValue());
                 }
                 ps.executeUpdate();
+                final ResultSet rs = ps.getGeneratedKeys();
+                if (rs.first()) {
+                    rowId = rs.getLong(1);
+                }
+                rs.close();
                 ps.close();
 
             } catch (SQLException e) {
@@ -73,7 +84,7 @@ public class AddQueryBuilder {
             }
 
             manageError(error);
-            return true;
+            return rowId;
         }
 
         private void manageError(String error) throws SQLException {
