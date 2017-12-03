@@ -210,8 +210,6 @@ public class SelectQueryBuilder<T> {
 
         final String fullQuery = getFullQuery();
 
-        System.out.println("FullQuery : " + fullQuery);
-
         java.sql.Connection con = Connection.getConnection();
         this.rs = null;
         this.stmt = null;
