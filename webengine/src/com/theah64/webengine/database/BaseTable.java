@@ -8,6 +8,7 @@ import com.theah64.webengine.utils.RequestException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class BaseTable<T> {
     public static final String TRUE = "1";
     private static final String ERROR_MESSAGE_UNDEFINED_METHOD = "Undefined method.";
     private static final String COLUMN_AS_TOTAL_ROWS = "total_rows";
-    private final String tableName;
+    protected final String tableName;
 
     public BaseTable(String tableName) {
         this.tableName = tableName;
@@ -252,6 +253,72 @@ public class BaseTable<T> {
 
     public List<T> getLast(int count) throws RequestException {
         return null;
+    }
+
+    public List<String> getLike(String column1, String value1, String column2, String value2Like, String columnToReturn) {
+        final String query = String.format("SELECT %s FROM %s WHERE %s = ? AND %s LIKE '%%%s%%' AND is_active = 1", columnToReturn, tableName, column1, column2, value2Like);
+
+        List<String> resultValues = null;
+        final java.sql.Connection con = Connection.getConnection();
+
+        try {
+            final PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, value1);
+
+            final ResultSet rs = ps.executeQuery();
+
+            if (rs.first()) {
+                resultValues = new ArrayList<>();
+                do {
+                    resultValues.add(rs.getString(columnToReturn));
+                } while (rs.next());
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return resultValues;
+    }
+
+    public String get(String column1, String value1, String column2, String value2, String columnToReturn) {
+        final String query = String.format("SELECT %s FROM %s WHERE %s = ? AND %s = ? AND is_active = 1 LIMIT 1", columnToReturn, tableName, column1, column2);
+
+        String resultValue = null;
+        final java.sql.Connection con = Connection.getConnection();
+
+        try {
+            final PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, value1);
+            ps.setString(2, value2);
+
+            final ResultSet rs = ps.executeQuery();
+
+            if (rs.first()) {
+                resultValue = rs.getString(columnToReturn);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return resultValue;
     }
 }
 
