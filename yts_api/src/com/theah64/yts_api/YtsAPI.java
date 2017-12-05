@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class YtsAPI {
 
-    private static final String BASE_URL = "https://yts.ag/api/v2";
+    private static final String BASE_URL = "https://yts.am/api/v2";
     private static final String LIST_MOVIES_END_POINT = BASE_URL + "/list_movies.json";
 
     public static List<YtsMovie> listMovies() {

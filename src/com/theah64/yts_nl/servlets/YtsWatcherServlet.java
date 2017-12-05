@@ -4,7 +4,7 @@ import com.theah64.webengine.exceptions.MailException;
 import com.theah64.webengine.servlets.AdvancedBaseServlet;
 import com.theah64.webengine.utils.CommonUtils;
 import com.theah64.webengine.utils.MailHelper;
-import com.theah64.webengine.utils.RequestException;
+import com.theah64.webengine.utils.Request;
 import com.theah64.webengine.utils.Response;
 import com.theah64.yts_api.YtsAPI;
 import com.theah64.yts_api.models.YtsMovie;
@@ -42,7 +42,7 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
     }
 
     @Override
-    protected void doAdvancedPost() throws SQLException, IOException, ServletException, RequestException {
+    protected void doAdvancedPost() throws SQLException, IOException, ServletException, Request.RequestException {
 
         System.out.println(new Date());
 
@@ -94,19 +94,19 @@ public class YtsWatcherServlet extends AdvancedBaseServlet {
 
                     } catch (MailException e) {
                         e.printStackTrace();
-                        throw new RequestException(e.getMessage());
+                        throw new Request.RequestException(e.getMessage());
                     }
 
 
                 } else {
-                    throw new RequestException("No subscribers found");
+                    throw new Request.RequestException("No subscribers found");
                 }
 
             } else {
-                throw new RequestException("No new movies found in yts.ag");
+                throw new Request.RequestException("No new movies found in yts.ag");
             }
         } else {
-            throw new RequestException("Failed to get movie list");
+            throw new Request.RequestException("Failed to get movie list");
         }
     }
 }

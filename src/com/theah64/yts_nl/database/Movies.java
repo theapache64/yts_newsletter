@@ -2,7 +2,7 @@ package com.theah64.yts_nl.database;
 
 import com.theah64.webengine.database.BaseTable;
 import com.theah64.webengine.database.Connection;
-import com.theah64.webengine.utils.RequestException;
+import com.theah64.webengine.utils.Request;
 import com.theah64.yts_api.models.YtsMovie;
 
 import java.sql.PreparedStatement;
@@ -67,7 +67,7 @@ public class Movies extends BaseTable<YtsMovie> {
     }
 
     @Override
-    public List<YtsMovie> getLast(int count) throws RequestException {
+    public List<YtsMovie> getLast(int count) throws Request.RequestException {
         final String query = "SELECT * FROM movies ORDER BY id DESC LIMIT ?";
         List<YtsMovie> movies = null;
         final java.sql.Connection con = Connection.getConnection();
@@ -92,7 +92,7 @@ public class Movies extends BaseTable<YtsMovie> {
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RequestException(e.getMessage());
+            throw new Request.RequestException(e.getMessage());
         } finally {
             try {
                 con.close();

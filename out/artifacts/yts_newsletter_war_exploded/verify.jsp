@@ -1,7 +1,6 @@
 <%@ page import="com.theah64.webengine.exceptions.MailException" %>
 <%@ page import="com.theah64.webengine.utils.MailHelper" %>
 <%@ page import="com.theah64.webengine.utils.Request" %>
-<%@ page import="com.theah64.webengine.utils.RequestException" %>
 <%@ page import="com.theah64.yts_api.models.YtsMovie" %>
 <%@ page import="com.theah64.yts_nl.database.Movies" %>
 <%@ page import="com.theah64.yts_nl.database.Subscriptions" %>
@@ -39,7 +38,7 @@
 
             MailHelper.sendMail(userEmail, "YTS Recent movies", newsLetter.getHtml(), "YTS Newsletter");
 
-        } catch (RequestException | SQLException | MailException e) {
+        } catch (Request.RequestException | SQLException | MailException e) {
             response.sendRedirect("result.jsp?title=Error&message=" + e.getMessage());
             return;
         }
