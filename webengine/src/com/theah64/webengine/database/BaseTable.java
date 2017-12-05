@@ -3,7 +3,7 @@ package com.theah64.webengine.database;
 
 import com.sun.istack.internal.Nullable;
 import com.theah64.webengine.database.querybuilders.QueryBuilderException;
-import com.theah64.webengine.utils.RequestException;
+import com.theah64.webengine.utils.Request;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -251,7 +251,7 @@ public class BaseTable<T> {
         return true;
     }
 
-    public List<T> getLast(int count) throws RequestException {
+    public List<T> getLast(int count) throws Request.RequestException {
         return null;
     }
 

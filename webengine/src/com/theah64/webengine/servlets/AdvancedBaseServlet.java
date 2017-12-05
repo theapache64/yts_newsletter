@@ -2,7 +2,6 @@ package com.theah64.webengine.servlets;
 
 
 import com.theah64.webengine.utils.Request;
-import com.theah64.webengine.utils.RequestException;
 import com.theah64.webengine.utils.Response;
 
 import javax.servlet.ServletException;
@@ -67,11 +66,12 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
 
             doAdvancedPost();
 
-        } catch (Exception e) {
+        } catch (SQLException | Request.RequestException e) {
             e.printStackTrace();
             out.write(new Response(e.getMessage()).toString());
         }
     }
+
 
     protected String getContentType() {
         return CONTENT_TYPE_JSON;
@@ -80,7 +80,7 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
 
     protected abstract String[] getRequiredParameters();
 
-    protected abstract void doAdvancedPost() throws SQLException, IOException, ServletException, RequestException;
+    protected abstract void doAdvancedPost() throws SQLException, IOException, ServletException;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -94,10 +94,16 @@ public class Request {
 
     public long getLongParameter(String key) {
         final String value = getStringParameter(key);
-        return value != null ? Long.parseLong(value) : -1;
+        return value != null && !value.trim().isEmpty() ? Long.parseLong(value) : -1;
     }
 
     public String[] getStringParameters(String key) {
         return request.getParameterValues(key);
+    }
+
+    public static class RequestException extends Throwable {
+        public RequestException(String message) {
+            super(message);
+        }
     }
 }

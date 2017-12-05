@@ -52,7 +52,7 @@ public class Form {
         return 0;
     }
 
-    public boolean isAllRequiredParamsAvailable() throws RequestException {
+    public boolean isAllRequiredParamsAvailable() throws Request.RequestException {
         if (reqParams != null) {
             final StringBuilder errorBuilder = new StringBuilder();
             for (final String reqParam : reqParams) {
@@ -66,13 +66,13 @@ public class Form {
                 //some error happened
                 errorBuilder.insert(0, "Missing params ");
 
-                throw new RequestException(errorBuilder.substring(0, errorBuilder.length() - 1));
+                throw new Request.RequestException(errorBuilder.substring(0, errorBuilder.length() - 1));
             } else {
                 //Has all params
                 return true;
             }
         } else {
-            throw new RequestException("Required params not set");
+            throw new Request.RequestException("Required params not set");
         }
     }
 }
