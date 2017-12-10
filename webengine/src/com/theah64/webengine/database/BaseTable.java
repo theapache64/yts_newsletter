@@ -24,6 +24,7 @@ public class BaseTable<T> {
     public static final String TRUE = "1";
     private static final String ERROR_MESSAGE_UNDEFINED_METHOD = "Undefined method.";
     private static final String COLUMN_AS_TOTAL_ROWS = "total_rows";
+    public static final String FALSE = "0";
     protected final String tableName;
 
     public BaseTable(String tableName) {
@@ -320,5 +321,6 @@ public class BaseTable<T> {
 
         return resultValue;
     }
+
 }
 

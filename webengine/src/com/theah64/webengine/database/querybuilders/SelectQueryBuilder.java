@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class SelectQueryBuilder<T> {
 
+    public static final int UNLIMITED = -1;
     private final String tableName;
     private final Callback<T> callback;
     private String[] columns;
@@ -74,7 +75,7 @@ public class SelectQueryBuilder<T> {
             queryBuilder.append("ORDER BY ").append(orderBy);
         }
 
-        if (limit != -1) {
+        if (limit != UNLIMITED) {
             queryBuilder.append(" LIMIT ").append(limit);
         }
 

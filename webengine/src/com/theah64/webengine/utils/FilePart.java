@@ -13,8 +13,8 @@ public class FilePart {
     private static final String CONTENT_TYPE_IMAGE_JPEG = "image/jpeg";
     private static final String CONTENT_TYPE_IMAGE_PNG = "image/png";
     private static final String CONTENT_TYPE_IMAGE_JPG = "image/jpg";
-    private static final String FILE_EXTENSION_JPG = ".jpg";
-    private static final String FILE_EXTENSION_PNG = ".png";
+    public static final String FILE_EXTENSION_JPG = ".jpg";
+    public static final String FILE_EXTENSION_PNG = ".png";
 
     private static final String FILE_EXTENSION_UNKNOWN = ".unk";
     private static final int FILE_NAME_LENGTH = 10;
@@ -54,6 +54,10 @@ public class FilePart {
             fileExtension = getFileExtension(this.filePart.getContentType());
         }
         return System.currentTimeMillis() + "_" + RandomString.getRandomFilename(FILE_NAME_LENGTH, fileExtension);
+    }
+
+    public String getFileExtensionFromContentType() {
+        return getFileExtension(this.filePart.getContentType());
     }
 
 
