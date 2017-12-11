@@ -30,6 +30,10 @@ public class AddQueryBuilder {
             return this;
         }
 
+        public AddQueryBuilder.Builder add(String column, boolean value) {
+            return add(column, value ? "1" : "0");
+        }
+
         public boolean done() throws SQLException, QueryBuilderException {
             return doneAndReturn() != -1;
         }

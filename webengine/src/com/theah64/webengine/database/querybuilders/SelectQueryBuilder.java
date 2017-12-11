@@ -72,7 +72,7 @@ public class SelectQueryBuilder<T> {
         }
 
         if (orderBy != null) {
-            queryBuilder.append("ORDER BY ").append(orderBy);
+            queryBuilder.append(" ORDER BY ").append(orderBy);
         }
 
         if (limit != UNLIMITED) {
@@ -198,6 +198,7 @@ public class SelectQueryBuilder<T> {
                 rs = stmt.executeQuery(fullQuery);
             } catch (SQLException e) {
                 e.printStackTrace();
+                System.out.println("FullQuery: " + fullQuery);
                 sqlError = e.getMessage();
             }
 
