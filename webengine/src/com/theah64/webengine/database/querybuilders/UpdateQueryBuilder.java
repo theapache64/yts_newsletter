@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.theah64.webengine.database.BaseTable.FALSE;
+import static com.theah64.webengine.database.BaseTable.TRUE;
+
 /**
  * Created by theapache64 on 30/10/17.
  */
@@ -39,6 +42,10 @@ public class UpdateQueryBuilder {
         public Builder set(final String column, final String value) {
             columnValues.put(column, value);
             return this;
+        }
+
+        public Builder set(final String column, final boolean value) {
+            return set(column, value ? TRUE : FALSE);
         }
 
         public Builder where(final String column, final String value) {
