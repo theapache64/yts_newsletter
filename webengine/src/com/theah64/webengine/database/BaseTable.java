@@ -64,6 +64,8 @@ public class BaseTable<T> {
     public void update(String whereColumn, String whereColumnValue, String updateColumn, String newUpdateColumnValue) throws SQLException {
         boolean isEdited = false;
         final String query = String.format("UPDATE %s SET %s = ? WHERE %s = ?;", tableName, updateColumn, whereColumn);
+        final String query2 = String.format("UPDATE %s SET %s = '" + newUpdateColumnValue + "' WHERE %s = '" + whereColumnValue + "';", tableName, updateColumn, whereColumn);
+        System.out.println(query2);
         final java.sql.Connection con = Connection.getConnection();
 
         try {

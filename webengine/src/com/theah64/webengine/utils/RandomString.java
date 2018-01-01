@@ -34,7 +34,6 @@ public class RandomString {
 
     public static String getRandomNumber(long length) {
         final StringBuilder numBuilder = new StringBuilder();
-        System.out.println(length % 18);
         long loopCount = length / 18;
         for (int i = 0; i < loopCount; i++) {
             numBuilder.append(getRandomNumberLimited(18));
