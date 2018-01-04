@@ -19,7 +19,7 @@ public class Request {
         this.requiredParams = requiredParams;
 
         if (!hasAllParams()) {
-            throw new RequestException(getErrorReport());
+            throw new Request.RequestException(getErrorReport());
         }
     }
 
