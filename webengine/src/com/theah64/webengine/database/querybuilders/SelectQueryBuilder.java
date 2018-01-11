@@ -16,11 +16,11 @@ import java.util.List;
  */
 public class SelectQueryBuilder<T> {
 
-    public static final int UNLIMITED = -1;
+    public static final String UNLIMITED = "NO_LIMIT";
     private final String tableName;
     private final Callback<T> callback;
     private String[] columns;
-    private int limit;
+    private String limit;
     private String[] whereColumns;
     private String[] whereColumnValues;
     private String orderBy;
@@ -28,7 +28,7 @@ public class SelectQueryBuilder<T> {
     private Statement stmt;
     private String sqlError;
 
-    public SelectQueryBuilder(String tableName, Callback<T> callback, String[] columns, String[] whereColumns, String[] whereColumnValues, int limit, String orderBy) {
+    public SelectQueryBuilder(String tableName, Callback<T> callback, String[] columns, String[] whereColumns, String[] whereColumnValues, String limit, String orderBy) {
         this.tableName = tableName;
         this.callback = callback;
         this.columns = columns;
@@ -63,7 +63,7 @@ public class SelectQueryBuilder<T> {
             queryBuilder.append(" WHERE ");
 
             for (final String wColumn : whereColumns) {
-                queryBuilder.append(wColumn).append(" = ? AND ");
+                queryBuilder.append(wColumn).append("= ? AND ");
             }
 
             //Removing last and
@@ -75,7 +75,7 @@ public class SelectQueryBuilder<T> {
             queryBuilder.append(" ORDER BY ").append(orderBy);
         }
 
-        if (limit != UNLIMITED) {
+        if (limit != null && !limit.equals(UNLIMITED)) {
             queryBuilder.append(" LIMIT ").append(limit);
         }
 
@@ -88,7 +88,7 @@ public class SelectQueryBuilder<T> {
         private final String tableName;
         private final Callback<T> callback;
         private String[] columns;
-        private int limit = -1;
+        private String limit = null;
         private String[] whereColumns;
         private String[] whereColumnValues;
         private String orderBy;
@@ -103,9 +103,13 @@ public class SelectQueryBuilder<T> {
             return this;
         }
 
-        public Builder<T> limit(int limit) {
+        public Builder<T> limit(String limit) {
             this.limit = limit;
             return this;
+        }
+
+        public Builder<T> limit(long limit) {
+            return limit(String.valueOf(limit));
         }
 
         public SelectQueryBuilder<T> build() {
@@ -123,12 +127,19 @@ public class SelectQueryBuilder<T> {
             return this;
         }
 
+        public Builder<T> where(String[] whereColumns, String[] whereColumnValues) {
+            this.whereColumns = whereColumns;
+            this.whereColumnValues = whereColumnValues;
+            return this;
+        }
     }
 
     public T get() throws QueryBuilderException, SQLException {
 
 
         final String fullQuery = getFullQuery();
+
+        System.out.println(fullQuery);
 
         java.sql.Connection con = Connection.getConnection();
         this.rs = null;
