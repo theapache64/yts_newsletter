@@ -22,7 +22,6 @@
         try {
             req = new Request(request, new String[]{Subscriptions.COLUMN_EMAIL, Subscriptions.COLUMN_VERIFICATION_CODE});
 
-
             final String userEmail = req.getStringParameter(Subscriptions.COLUMN_EMAIL);
 
             Subscriptions.getInstance().update(new Subscription(
@@ -31,7 +30,7 @@
                     true, true));
 
             //Send a sample
-            final List<YtsMovie> movieList = Movies.getInstance().getLast(3);
+            final List<YtsMovie> movieList = Movies.getInstance().getLast(10);
             final NewsLetter newsLetter = new NewsLetter.Builder(movieList.size())
                     .addMovies(movieList)
                     .build();
