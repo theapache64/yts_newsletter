@@ -75,4 +75,8 @@ public class Form {
             throw new Request.RequestException("Required params not set");
         }
     }
+
+    public boolean getBoolean(String key) {
+        return Boolean.parseBoolean(getString(key, "false"));
+    }
 }
