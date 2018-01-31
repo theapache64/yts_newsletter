@@ -65,7 +65,7 @@ public class BaseTable<T> {
         boolean isEdited = false;
         final String query = String.format("UPDATE %s SET %s = ? WHERE %s = ?;", tableName, updateColumn, whereColumn);
         final String query2 = String.format("UPDATE %s SET %s = '" + newUpdateColumnValue + "' WHERE %s = '" + whereColumnValue + "';", tableName, updateColumn, whereColumn);
-        System.out.println(query2);
+
         final java.sql.Connection con = Connection.getConnection();
 
         try {
@@ -248,7 +248,7 @@ public class BaseTable<T> {
 
     public static boolean manageError(String error) throws SQLException {
         if (error != null) {
-            System.out.println("Error is " + error);
+
             throw new SQLException(error);
         }
         return true;

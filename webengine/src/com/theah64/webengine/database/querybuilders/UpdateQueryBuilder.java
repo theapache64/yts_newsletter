@@ -81,7 +81,7 @@ public class UpdateQueryBuilder {
             queryBuilder.append(" WHERE ").append(whereColumn).append(" = ?;");
         }
 
-        System.out.println("UPDATE: " + queryBuilder.toString());
+
 
         //Now, let's bind the values
         java.sql.Connection con = Connection.getConnection();

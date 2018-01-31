@@ -28,10 +28,10 @@ public class MailHelper {
             throw new IllegalArgumentException("Gmail username and password shouldn't be null");
         }
 
-        System.out.println("Sending email to " + to);
 
-        System.out.println("u:" + gmailUsername);
-        System.out.println("p:" + gmailPassword);
+
+
+
 
 
         final Properties properties = new Properties();
@@ -62,7 +62,7 @@ public class MailHelper {
             mimeMessage.setContent(message, "text/html; charset=utf-8");
 
             Transport.send(mimeMessage);
-            System.out.println("Mail sent :" + message);
+
         } catch (MessagingException | UnsupportedEncodingException e) {
             e.printStackTrace();
             throw new MailException(e.getMessage());

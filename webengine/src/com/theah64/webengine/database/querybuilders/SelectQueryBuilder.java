@@ -139,7 +139,7 @@ public class SelectQueryBuilder<T> {
 
         final String fullQuery = getFullQuery();
 
-        System.out.println(fullQuery);
+
 
         java.sql.Connection con = Connection.getConnection();
         this.rs = null;
@@ -209,7 +209,7 @@ public class SelectQueryBuilder<T> {
                 rs = stmt.executeQuery(fullQuery);
             } catch (SQLException e) {
                 e.printStackTrace();
-                System.out.println("FullQuery: " + fullQuery);
+
                 sqlError = e.getMessage();
             }
 
