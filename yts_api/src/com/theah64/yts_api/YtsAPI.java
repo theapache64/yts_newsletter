@@ -37,7 +37,7 @@ public class YtsAPI {
                                 jaItem.getString("medium_cover_image"),
                                 String.valueOf(jaItem.getInt("year")),
                                 String.valueOf(jaItem.getDouble("rating")),
-                                YtsAPI.toString(jaItem.getJSONArray("genres")),
+                                jaItem.has("genres") ? YtsAPI.toString(jaItem.getJSONArray("genres")) : "",
                                 jaItem.getString("url")
                         );
                     }
