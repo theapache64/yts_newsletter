@@ -92,7 +92,7 @@ public class BaseTable<T> {
 
     }
 
-    public T get(final String column1, final String value1, final String column2, final String value2) {
+    public T get(final String column1, final String value1, final String column2, final String value2) throws QueryBuilderException, SQLException {
         throw new IllegalArgumentException(ERROR_MESSAGE_UNDEFINED_METHOD);
     }
 
@@ -210,6 +210,7 @@ public class BaseTable<T> {
         return delete(whereColumn, whereColumnValue, null, null);
 
     }
+
 
     public final boolean delete(final String whereColumn, final String whereColumnValue, @Nullable final String whereColumn2, @Nullable final String whereColumnValue2) {
         boolean isDeleted = false;
