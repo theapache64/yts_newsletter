@@ -2,6 +2,7 @@ package com.theah64.webengine.utils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Random;
 
 /**
@@ -34,6 +35,6 @@ public class StatusResponse {
     }
 
     public static void redirect(HttpServletResponse response, String title) throws IOException {
-        response.sendRedirect("status.jsp?title=" + title + "&message=" + randomErrorMessages[random.nextInt(randomErrorMessages.length)]);
+        response.sendRedirect("status.jsp?title=" + URLEncoder.encode(title, "UTF-8") + "&message=" + URLEncoder.encode(randomErrorMessages[random.nextInt(randomErrorMessages.length)], "UTF-8"));
     }
 }
