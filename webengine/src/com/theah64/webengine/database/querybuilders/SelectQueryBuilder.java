@@ -42,6 +42,9 @@ public class SelectQueryBuilder<T> {
         this.queryParams = queryParams;
     }
 
+    public SelectQueryBuilder(String tableName, Callback<T> callback, String[] columns, String[] whereColumns, String[] whereColumnValues, String limit, String orderBy) {
+        this(tableName, callback, columns, whereColumns, whereColumnValues, limit, orderBy, null, null);
+    }
 
     private String getFullQuery() throws QueryBuilderException {
 
