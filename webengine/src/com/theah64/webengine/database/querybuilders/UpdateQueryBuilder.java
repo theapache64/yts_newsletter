@@ -9,6 +9,7 @@ import java.util.Map;
 
 import static com.theah64.webengine.database.BaseTable.FALSE;
 import static com.theah64.webengine.database.BaseTable.TRUE;
+import static com.theah64.webengine.database.BaseTable.manageError;
 
 /**
  * Created by theapache64 on 30/10/17.
@@ -59,8 +60,9 @@ public class UpdateQueryBuilder {
         }
     }
 
-    public boolean done() throws QueryBuilderException {
+    public boolean done() throws QueryBuilderException, SQLException {
 
+        String error = null;
         boolean isUpdated = false;
         StringBuilder queryBuilder = new StringBuilder("UPDATE ").append(tableName);
         if (columnValues.isEmpty()) {
@@ -80,7 +82,6 @@ public class UpdateQueryBuilder {
         if (whereColumn != null) {
             queryBuilder.append(" WHERE ").append(whereColumn).append(" = ?;");
         }
-
 
 
         //Now, let's bind the values
@@ -104,6 +105,7 @@ public class UpdateQueryBuilder {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            error = e.getMessage();
         } finally {
             try {
                 con.close();
@@ -111,6 +113,8 @@ public class UpdateQueryBuilder {
                 e.printStackTrace();
             }
         }
+
+        manageError(error);
 
         return isUpdated;
     }

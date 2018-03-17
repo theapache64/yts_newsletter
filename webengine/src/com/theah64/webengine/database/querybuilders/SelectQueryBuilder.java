@@ -27,8 +27,10 @@ public class SelectQueryBuilder<T> {
     private ResultSet rs;
     private Statement stmt;
     private String sqlError;
+    private final String query;
+    private final String[] queryParams;
 
-    public SelectQueryBuilder(String tableName, Callback<T> callback, String[] columns, String[] whereColumns, String[] whereColumnValues, String limit, String orderBy) {
+    public SelectQueryBuilder(String tableName, Callback<T> callback, String[] columns, String[] whereColumns, String[] whereColumnValues, String limit, String orderBy, String query, String[] queryParams) {
         this.tableName = tableName;
         this.callback = callback;
         this.columns = columns;
@@ -36,50 +38,62 @@ public class SelectQueryBuilder<T> {
         this.whereColumnValues = whereColumnValues;
         this.limit = limit;
         this.orderBy = orderBy;
+        this.query = query;
+        this.queryParams = queryParams;
     }
+
 
     private String getFullQuery() throws QueryBuilderException {
 
-        StringBuilder queryBuilder = new StringBuilder("SELECT ");
-        if (columns == null) {
-            throw new QueryBuilderException("No columns selected");
-        }
+        if (query != null) {
+            return query;
+        } else {
 
-        for (final String column : columns) {
-            queryBuilder.append(column).append(",");
-        }
+            //Building custom query
 
-        //Removing last comma
-        queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - 1));
-
-        queryBuilder.append(" FROM ").append(tableName);
-
-        if (whereColumns != null && whereColumnValues != null) {
-
-            if (whereColumns.length != whereColumnValues.length) {
-                throw new QueryBuilderException("Where section count doesn't match");
+            StringBuilder queryBuilder = new StringBuilder("SELECT ");
+            if (columns == null) {
+                throw new QueryBuilderException("No columns selected");
             }
 
-            queryBuilder.append(" WHERE ");
-
-            for (final String wColumn : whereColumns) {
-                queryBuilder.append(wColumn).append("= ? AND ");
+            for (final String column : columns) {
+                queryBuilder.append(column).append(",");
             }
 
-            //Removing last and
-            //4  = AND .length()
-            queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - 4));
+            //Removing last comma
+            queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - 1));
+
+            queryBuilder.append(" FROM ").append(tableName);
+
+            if (whereColumns != null && whereColumnValues != null) {
+
+                if (whereColumns.length != whereColumnValues.length) {
+                    throw new QueryBuilderException("Where section count doesn't match");
+                }
+
+                queryBuilder.append(" WHERE ");
+
+                for (final String wColumn : whereColumns) {
+                    queryBuilder.append(wColumn).append("= ? AND ");
+                }
+
+                //Removing last and
+                //4  = AND .length()
+                queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - 4));
+            }
+
+            if (orderBy != null) {
+                queryBuilder.append(" ORDER BY ").append(orderBy);
+            }
+
+            if (limit != null && !limit.equals(UNLIMITED)) {
+                queryBuilder.append(" LIMIT ").append(limit);
+            }
+
+            return queryBuilder.toString();
         }
 
-        if (orderBy != null) {
-            queryBuilder.append(" ORDER BY ").append(orderBy);
-        }
 
-        if (limit != null && !limit.equals(UNLIMITED)) {
-            queryBuilder.append(" LIMIT ").append(limit);
-        }
-
-        return queryBuilder.toString();
     }
 
 
@@ -92,6 +106,8 @@ public class SelectQueryBuilder<T> {
         private String[] whereColumns;
         private String[] whereColumnValues;
         private String orderBy;
+        private String query;
+        private String[] queryParams;
 
         public Builder(String tableName, @NotNull Callback<T> callback) {
             this.tableName = tableName;
@@ -113,7 +129,7 @@ public class SelectQueryBuilder<T> {
         }
 
         public SelectQueryBuilder<T> build() {
-            return new SelectQueryBuilder<T>(tableName, callback, columns, whereColumns, whereColumnValues, limit, orderBy);
+            return new SelectQueryBuilder<T>(tableName, callback, columns, whereColumns, whereColumnValues, limit, orderBy, query, queryParams);
         }
 
         public Builder<T> where(String whereColumn, String whereColumnValue) {
@@ -132,13 +148,22 @@ public class SelectQueryBuilder<T> {
             this.whereColumnValues = whereColumnValues;
             return this;
         }
+
+        public Builder<T> query(String query) {
+            this.query = query;
+            return this;
+        }
+
+        public Builder<T> bind(String[] queryParams) {
+            this.queryParams = queryParams;
+            return this;
+        }
     }
 
     public T get() throws QueryBuilderException, SQLException {
 
 
         final String fullQuery = getFullQuery();
-
 
 
         java.sql.Connection con = Connection.getConnection();

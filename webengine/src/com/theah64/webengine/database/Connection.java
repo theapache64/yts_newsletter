@@ -14,7 +14,6 @@ import java.sql.SQLException;
  */
 public class Connection {
 
-
     private static DataSource ds;
 
     public static java.sql.Connection getConnection() {
