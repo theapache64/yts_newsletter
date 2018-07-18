@@ -1,8 +1,8 @@
 package com.theah64.webengine.utils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 
 /**
  * Created by theapache64 on 1/10/17.
@@ -12,17 +12,14 @@ public class CommonUtils {
         return size <= 1 ? singular : plural;
     }
 
-    public static boolean isJSONValid(String test) throws Request.RequestException {
-        String error = null;
+    public static boolean isJSONValid(String jsonInString) throws Request.RequestException {
+
         try {
-            new JSONObject(test);
-        } catch (JSONException ex) {
-            try {
-                new JSONArray(test);
-            } catch (JSONException ex1) {
-                throw new Request.RequestException(ex1.getMessage());
-            }
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.readTree(jsonInString);
+            return true;
+        } catch (IOException e) {
+            throw new Request.RequestException(e.getMessage());
         }
-        return true;
     }
 }

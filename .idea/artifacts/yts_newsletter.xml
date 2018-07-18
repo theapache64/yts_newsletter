@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="yts_newsletter">
-    <output-path>$PROJECT_DIR$/out/artifacts/yts_newsletter</output-path>
-    <root id="archive" name="yts_newsletter.war">
-      <element id="artifact" artifact-name="yts_newsletter:war exploded" />
-    </root>
-  </artifact>
-</component>
