@@ -71,12 +71,15 @@
 
                 Subscriptions.getInstance().add(subscription);
 
-                new Thread(() -> {
-                    //Sending verification mail
-                    try {
-                        MailHelper.sendMail(email, "YTS Newsletter subscription", MailHelper.getVerificationHtml(getVerificationLink(subscription)), "YTS Newsletter");
-                    } catch (MailException e) {
-                        e.printStackTrace();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Sending verification mail
+                        try {
+                            MailHelper.sendMail(email, "YTS Newsletter subscription", MailHelper.getVerificationHtml(getVerificationLink(subscription)), "YTS Newsletter");
+                        } catch (MailException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }).start();
 
