@@ -12,14 +12,14 @@ public class CommonUtils {
         return size <= 1 ? singular : plural;
     }
 
-    public static boolean isJSONValid(String jsonInString) throws Request.RequestException {
+    public static boolean isJSONValid(String jsonInString, String message) throws Request.RequestException {
 
         try {
             final ObjectMapper mapper = new ObjectMapper();
             mapper.readTree(jsonInString);
             return true;
         } catch (IOException e) {
-            throw new Request.RequestException(e.getMessage());
+            throw new Request.RequestException(message + ":" + e.getMessage());
         }
     }
 }

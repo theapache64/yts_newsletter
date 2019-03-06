@@ -61,7 +61,7 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
         try {
 
             if (getRequiredParameters() != null) {
-                request = new Request(req, getRequiredParameters());
+                request = new Request(req, getRequiredParameters(), false);
             }
 
             doAdvancedPost();
