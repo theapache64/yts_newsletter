@@ -10,9 +10,8 @@
         </element>
         <element id="directory" name="lib">
           <element id="file-copy" path="$PROJECT_DIR$/libs/commons-io-2.6.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/libs/jackson-databind-2.8.4.jar" />
-          <element id="library" level="application" name="json" />
           <element id="library" level="project" name="com.fasterxml.jackson.core:jackson-databind:2.8.4" />
+          <element id="library" level="application" name="json" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="yts_newsletter/web/Web" />

@@ -11,7 +11,6 @@ public class RandomString {
 
     private static final String randomEngine = "0123456789AaBbCcDdEeFfGgHhIiJjKkLkMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
     private static Random random = new Random();
-    ;
 
     public static String get(final int length) {
         return getRandomString(length);
