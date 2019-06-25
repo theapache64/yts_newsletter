@@ -47,7 +47,10 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
         out.write(new Response(methodErrorMessage).getResponse());
     }
 
-    protected PrintWriter getWriter() {
+    protected PrintWriter getWriter() throws IOException {
+        if (out == null) {
+            out = this.httpServletResponse.getWriter();
+        }
         return out;
     }
 
@@ -56,7 +59,7 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
         resp.setContentType(getContentType());
         this.httpServletRequest = req;
         this.httpServletResponse = resp;
-        out = resp.getWriter();
+
 
         try {
 
