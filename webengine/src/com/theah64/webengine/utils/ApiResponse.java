@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Created by theapache64 on 11/9/16.
  */
-public class Response {
+public class ApiResponse {
 
     private static final int ERROR_CODE_NO_ERROR = 0;
     private static final String KEY_ERROR = "error";
@@ -21,26 +21,26 @@ public class Response {
     private final JSONObject joData;
 
 
-    private Response(final boolean hasError, final int errorCode, final String message, final JSONObject joData) {
+    private ApiResponse(final boolean hasError, final int errorCode, final String message, final JSONObject joData) {
         this.hasError = hasError;
         this.errorCode = errorCode;
         this.message = message;
         this.joData = joData;
     }
 
-    public Response(final String message, final JSONObject joData) {
+    public ApiResponse(final String message, final JSONObject joData) {
         this(false, ERROR_CODE_NO_ERROR, message, joData);
     }
 
-    public Response(final String message, final String key, final String value) throws JSONException {
+    public ApiResponse(final String message, final String key, final String value) throws JSONException {
         this(false, ERROR_CODE_NO_ERROR, message, new JSONObject().put(key, value));
     }
 
-    public Response(final int errorCode, final String errorMessage) {
+    public ApiResponse(final int errorCode, final String errorMessage) {
         this(true, errorCode, errorMessage, null);
     }
 
-    public Response(final String errorMessage) {
+    public ApiResponse(final String errorMessage) {
         this(true, 1, errorMessage, null);
     }
 

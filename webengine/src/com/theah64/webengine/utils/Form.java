@@ -1,6 +1,7 @@
 package com.theah64.webengine.utils;
 
 import com.sun.istack.internal.Nullable;
+import com.theah64.webengine.exceptions.RequestException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -52,7 +53,7 @@ public class Form {
         return 0;
     }
 
-    public boolean isAllRequiredParamsAvailable() throws Request.RequestException {
+    public boolean isAllRequiredParamsAvailable() throws RequestException {
         if (reqParams != null) {
             final StringBuilder errorBuilder = new StringBuilder();
             for (final String reqParam : reqParams) {
@@ -66,13 +67,13 @@ public class Form {
                 //some error happened
                 errorBuilder.insert(0, "Missing params ");
 
-                throw new Request.RequestException(errorBuilder.substring(0, errorBuilder.length() - 1));
+                throw new RequestException(errorBuilder.substring(0, errorBuilder.length() - 1));
             } else {
                 //Has all params
                 return true;
             }
         } else {
-            throw new Request.RequestException("Required params not set");
+            throw new RequestException("Required params not set");
         }
     }
 

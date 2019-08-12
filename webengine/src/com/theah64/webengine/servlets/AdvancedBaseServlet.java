@@ -1,8 +1,9 @@
 package com.theah64.webengine.servlets;
 
 
+import com.theah64.webengine.exceptions.RequestException;
 import com.theah64.webengine.utils.Request;
-import com.theah64.webengine.utils.Response;
+import com.theah64.webengine.utils.ApiResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +19,7 @@ import java.sql.SQLException;
 public abstract class AdvancedBaseServlet extends HttpServlet {
 
     public static final String VERSION_CODE = "/v1";
-    private static final String CONTENT_TYPE_JSON = "application/json";
+    public static final String CONTENT_TYPE_JSON = "application/json";
     private static final String ERROR_GET_NOT_SUPPORTED = "GET method not supported";
     private static final String ERROR_POST_NOT_SUPPORTED = "POST method not supported";
 
@@ -44,7 +45,7 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
         final PrintWriter out = response.getWriter();
 
         //GET Method not supported
-        out.write(new Response(methodErrorMessage).getResponse());
+        out.write(new ApiResponse(methodErrorMessage).getResponse());
     }
 
     protected PrintWriter getWriter() throws IOException {
@@ -60,6 +61,9 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
         this.httpServletRequest = req;
         this.httpServletResponse = resp;
 
+        if (out == null) {
+            out = this.httpServletResponse.getWriter();
+        }
 
         try {
 
@@ -69,9 +73,9 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
 
             doAdvancedPost();
 
-        } catch (SQLException | Request.RequestException e) {
+        } catch (SQLException | RequestException e) {
             e.printStackTrace();
-            out.write(new Response(e.getMessage()).toString());
+            getWriter().write(new ApiResponse(e.getMessage()).toString());
         }
     }
 
@@ -83,7 +87,7 @@ public abstract class AdvancedBaseServlet extends HttpServlet {
 
     protected abstract String[] getRequiredParameters();
 
-    protected abstract void doAdvancedPost() throws SQLException, IOException, ServletException, Request.RequestException;
+    protected abstract void doAdvancedPost() throws SQLException, IOException, ServletException, RequestException;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

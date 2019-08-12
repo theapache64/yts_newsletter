@@ -1,5 +1,6 @@
 package com.theah64.webengine.utils;
 
+import com.theah64.webengine.exceptions.RequestException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +28,7 @@ public class Request {
         this.isJsonBody = isJsonBody;
 
         if (!hasAllParams()) {
-            throw new Request.RequestException(getErrorReport());
+            throw new RequestException(getErrorReport());
         }
     }
 
@@ -170,9 +171,5 @@ public class Request {
         return request.getParameterValues(key);
     }
 
-    public static class RequestException extends Throwable {
-        public RequestException(String message) {
-            super(message);
-        }
-    }
+
 }
